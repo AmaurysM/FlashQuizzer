@@ -1,10 +1,13 @@
 package com.example.flashquizzer.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.example.flashquizzer.FlashQuizzerDestinations
 import androidx.navigation.NavHostController
+import com.example.flashquizzer.FlashQuizzerDestinations
+import com.example.flashquizzer.model.AuthManager
 
-class HomePageViewmodel: ViewModel() {
+
+class HomePageViewmodel : ViewModel() {
+
     fun goUploadDoc(navController: NavHostController) {
         navController.navigate(FlashQuizzerDestinations.UploadDoc.route)
     }
@@ -25,4 +28,7 @@ class HomePageViewmodel: ViewModel() {
         navController.navigate(FlashQuizzerDestinations.Register.route)
     }
 
+    fun logout() {
+        AuthManager.logout()
+    }
 }

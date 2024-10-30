@@ -8,9 +8,7 @@ import com.example.flashquizzer.viewmodel.TakeQuizViewmodel
 
 @Composable
 fun TakeQuizView(
-    navController: NavHostController
-    , modifier: Modifier
-    , viewModel: TakeQuizViewmodel = viewModel()
+    navController: NavHostController, modifier: Modifier, viewModel: TakeQuizViewmodel = viewModel()
 ) {
 
 }

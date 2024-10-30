@@ -18,29 +18,29 @@ import com.example.flashquizzer.view.ViewFlashcardsView
 fun FlashQuizzerNavigation(
     navController: NavHostController = rememberNavController(),
     modifier: Modifier = Modifier
-){
+) {
 
     NavHost(
         navController = navController,
         startDestination = FlashQuizzerDestinations.Home.route,
         modifier = modifier
-    ){
-        composable(FlashQuizzerDestinations.Home.route){
+    ) {
+        composable(FlashQuizzerDestinations.Home.route) {
             HomePageView(navController, modifier)
         }
-        composable(FlashQuizzerDestinations.UploadDoc.route){
+        composable(FlashQuizzerDestinations.UploadDoc.route) {
             UploadDocView(navController, modifier)
         }
-        composable(FlashQuizzerDestinations.ViewFlashcards.route){
+        composable(FlashQuizzerDestinations.ViewFlashcards.route) {
             ViewFlashcardsView(navController, modifier)
         }
-        composable(FlashQuizzerDestinations.TakeQuiz.route){
+        composable(FlashQuizzerDestinations.TakeQuiz.route) {
             TakeQuizView(navController, modifier)
         }
-        composable(FlashQuizzerDestinations.Login.route){
+        composable(FlashQuizzerDestinations.Login.route) {
             LoginView(navController, modifier)
         }
-        composable(FlashQuizzerDestinations.Register.route){
+        composable(FlashQuizzerDestinations.Register.route) {
             RegisterView(navController, modifier)
         }
     }
