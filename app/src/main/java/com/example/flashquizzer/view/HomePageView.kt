@@ -46,25 +46,21 @@ fun HomePageView(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Button(onClick = {
-                navController.navigate(FlashQuizzerDestinations.UploadDoc.route)
-                }, modifier = Modifier.padding(bottom = 10.dp)
+            Button(onClick = { viewModel.goUploadDoc(navController) }
+                , modifier = Modifier.padding(bottom = 10.dp)
             ) {
                 Text(text = "Upload Document")
-
             }
 
             Button(
-                onClick = {
-                navController.navigate(FlashQuizzerDestinations.ViewFlashcards.route)
-                }, modifier = Modifier.padding(bottom = 10.dp)
+                onClick = { viewModel.goCreateFlashcards(navController) }
+                , modifier = Modifier.padding(bottom = 10.dp)
             ) {
                 Text(text = "Create Flashcards")
 
             }
-            Button(onClick = {
-                navController.navigate(FlashQuizzerDestinations.TakeQuiz.route)
-                }, modifier = Modifier.padding(bottom = 10.dp)
+            Button(onClick = { viewModel.goTakeQuiz(navController) }
+                , modifier = Modifier.padding(bottom = 10.dp)
             ) {
                 Text(text = "Take Quiz")
 
@@ -81,7 +77,7 @@ fun HomePageView(
             horizontalArrangement = Arrangement.Center
             , verticalAlignment = Alignment.CenterVertically
         ){
-            Button(onClick = {}
+            Button(onClick = { viewModel.goLogin(navController) }
                 , shape = MaterialTheme.shapes.small
             ) {
                 Text(text = "Login")
@@ -89,7 +85,7 @@ fun HomePageView(
 
             Text(text = "or", modifier = Modifier.padding(horizontal = 8.dp))
 
-            Button(onClick = {}
+            Button(onClick = { viewModel.goRegister(navController) }
                 , shape = MaterialTheme.shapes.small) {
                 Text(text = "Register")
             }
