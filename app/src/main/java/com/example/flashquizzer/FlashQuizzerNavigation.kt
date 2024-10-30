@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.flashquizzer.view.HomePageView
 import com.example.flashquizzer.view.LoginView
+import com.example.flashquizzer.view.RegisterView
 import com.example.flashquizzer.view.TakeQuizView
 import com.example.flashquizzer.view.UploadDocView
 import com.example.flashquizzer.view.ViewFlashcardsView
@@ -38,6 +39,9 @@ fun FlashQuizzerNavigation(
         }
         composable(FlashQuizzerDestinations.Login.route){
             LoginView(navController, modifier)
+        }
+        composable(FlashQuizzerDestinations.Register.route){
+            RegisterView(navController, modifier)
         }
     }
 }

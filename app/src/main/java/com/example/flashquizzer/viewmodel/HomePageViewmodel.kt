@@ -22,7 +22,7 @@ class HomePageViewmodel: ViewModel() {
     }
 
     fun goRegister(navController: NavHostController) {
-        //TODO("Not yet implemented")
+        navController.navigate(FlashQuizzerDestinations.Register.route)
     }
 
 }
