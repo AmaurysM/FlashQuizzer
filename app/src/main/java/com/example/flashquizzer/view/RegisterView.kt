@@ -57,13 +57,13 @@ fun RegisterView(
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             value = viewModel.registerData.email,
-            onValueChange = { viewModel.registerData = viewModel.registerData.copy(email = it) },
-            label = { Text(text = "Email") }
+            onValueChange = { newEmail: String -> viewModel.registerData = viewModel.registerData.copy(email = newEmail) },
+           label = { Text(text = "Email") }
         )
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             value = viewModel.registerData.password,
-            onValueChange = { viewModel.registerData = viewModel.registerData.copy(password = it) },
+            onValueChange = { newPassword: String -> viewModel.registerData = viewModel.registerData.copy(password = newPassword) },
             label = { Text(text = "Password") }
         )
 

@@ -2,8 +2,6 @@ package com.example.flashquizzer.model
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.flashquizzer.viewmodel.LoginData
-import com.example.flashquizzer.viewmodel.RegisterData
 import com.google.firebase.auth.FirebaseAuth
 
 object AuthManager {

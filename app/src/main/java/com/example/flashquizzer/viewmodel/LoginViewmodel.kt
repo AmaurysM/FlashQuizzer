@@ -7,10 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import com.example.flashquizzer.FlashQuizzerDestinations
 import com.example.flashquizzer.model.AuthManager
-
-
-data class LoginData(var email: String, var password: String)
-
+import com.example.flashquizzer.model.LoginData
 
 class LoginViewmodel : ViewModel() {
     var loginData by mutableStateOf(LoginData("", ""))

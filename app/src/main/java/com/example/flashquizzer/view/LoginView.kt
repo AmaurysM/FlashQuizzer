@@ -58,14 +58,14 @@ fun LoginView(
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             value = viewModel.loginData.email,
-            onValueChange = { viewModel.loginData = viewModel.loginData.copy(email = it) },
-            label = { Text(text = "Email") }
+            onValueChange = { newEmail: String -> viewModel.loginData = viewModel.loginData.copy(email = newEmail) },
+            label = { Text( text = "Email")}
         )
 
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             value = viewModel.loginData.password,
-            onValueChange = { viewModel.loginData = viewModel.loginData.copy(password = it) },
+            onValueChange = { newPassword: String -> viewModel.loginData = viewModel.loginData.copy(password = newPassword) },
             label = { Text(text = "Password") }
         )
         Row(

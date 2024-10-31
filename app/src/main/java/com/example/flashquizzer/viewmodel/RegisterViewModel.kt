@@ -7,8 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import com.example.flashquizzer.FlashQuizzerDestinations
 import com.example.flashquizzer.model.AuthManager
-
-data class RegisterData(var email: String, var password: String)
+import com.example.flashquizzer.model.RegisterData
 
 class RegisterViewmodel : ViewModel() {
 
