@@ -1,4 +1,4 @@
-package com.example.flashquizzer.viewmodel
+package com.example.flashquizzer.ui.viewflashcards
 
 import androidx.lifecycle.ViewModel
 

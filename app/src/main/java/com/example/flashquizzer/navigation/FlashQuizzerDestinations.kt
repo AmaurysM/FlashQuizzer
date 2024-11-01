@@ -1,4 +1,4 @@
-package com.example.flashquizzer
+package com.example.flashquizzer.navigation
 
 sealed class FlashQuizzerDestinations(val route: String) {
     data object Home : FlashQuizzerDestinations("home")

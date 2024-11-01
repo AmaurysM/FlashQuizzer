@@ -1,4 +1,4 @@
-package com.example.flashquizzer.view
+package com.example.flashquizzer.ui.homepage
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,7 +24,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.flashquizzer.model.AuthManager
 import com.example.flashquizzer.model.AuthState
-import com.example.flashquizzer.viewmodel.HomePageViewmodel
 
 @Preview(showBackground = true)
 @Composable

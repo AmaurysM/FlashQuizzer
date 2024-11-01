@@ -1,4 +1,4 @@
-package com.example.flashquizzer
+package com.example.flashquizzer.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -6,12 +6,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.flashquizzer.view.HomePageView
-import com.example.flashquizzer.view.LoginView
-import com.example.flashquizzer.view.RegisterView
-import com.example.flashquizzer.view.TakeQuizView
-import com.example.flashquizzer.view.UploadDocView
-import com.example.flashquizzer.view.ViewFlashcardsView
+import com.example.flashquizzer.ui.homepage.HomePageView
+import com.example.flashquizzer.ui.login.LoginView
+import com.example.flashquizzer.ui.register.RegisterView
+import com.example.flashquizzer.ui.takequiz.TakeQuizView
+import com.example.flashquizzer.ui.uploaddoc.UploadDocView
+import com.example.flashquizzer.ui.viewflashcards.ViewFlashcardsView
 
 
 @Composable

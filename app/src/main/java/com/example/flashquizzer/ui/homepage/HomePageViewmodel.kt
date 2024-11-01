@@ -1,8 +1,8 @@
-package com.example.flashquizzer.viewmodel
+package com.example.flashquizzer.ui.homepage
 
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
-import com.example.flashquizzer.FlashQuizzerDestinations
+import com.example.flashquizzer.navigation.FlashQuizzerDestinations
 import com.example.flashquizzer.model.AuthManager
 
 
