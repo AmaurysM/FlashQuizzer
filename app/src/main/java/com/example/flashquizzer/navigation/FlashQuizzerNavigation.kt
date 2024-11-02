@@ -17,7 +17,8 @@ import com.example.flashquizzer.ui.viewflashcards.ViewFlashcardsView
 @Composable
 fun FlashQuizzerNavigation(
     navController: NavHostController = rememberNavController(),
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    topBarIsVisible: (Boolean) -> Unit = { input -> input}
 ) {
 
     NavHost(
@@ -26,21 +27,27 @@ fun FlashQuizzerNavigation(
         modifier = modifier
     ) {
         composable(FlashQuizzerDestinations.Home.route) {
+            topBarIsVisible(false)
             HomePageView(navController, modifier)
         }
         composable(FlashQuizzerDestinations.UploadDoc.route) {
+            topBarIsVisible(false)
             UploadDocView(navController, modifier)
         }
         composable(FlashQuizzerDestinations.ViewFlashcards.route) {
+            topBarIsVisible(true)
             ViewFlashcardsView(navController, modifier)
         }
         composable(FlashQuizzerDestinations.TakeQuiz.route) {
+            topBarIsVisible(true)
             TakeQuizView(navController, modifier)
         }
         composable(FlashQuizzerDestinations.Login.route) {
+            topBarIsVisible(false)
             LoginView(navController, modifier)
         }
         composable(FlashQuizzerDestinations.Register.route) {
+            topBarIsVisible(false)
             RegisterView(navController, modifier)
         }
     }
