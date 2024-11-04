@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.example.flashquizzer.model.Flashcard
 
 class ViewFlashcardsViewmodel : ViewModel() {
+
     fun getFlashcards(): List<Flashcard> {
         // TODO: Implement getting flashcards from firebase
         return listOf(
@@ -19,10 +20,5 @@ class ViewFlashcardsViewmodel : ViewModel() {
         } else {
             currentSide.value = it.front
         }
-        /*if (it.currentSide == it.front) {
-            it.currentSide = it.back
-        } else {
-            it.currentSide = it.front
-        }*/
     }
 }
