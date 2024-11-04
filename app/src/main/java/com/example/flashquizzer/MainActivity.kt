@@ -15,7 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.example.flashquizzer.navigation.FlashQuizzerNavigation
 import com.example.flashquizzer.ui.theme.FlashQuizzerTheme
-import com.example.flashquizzer.ui.topbar.topBarView
+import com.example.flashquizzer.ui.topbar.TopBarView
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,7 +29,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     topBar = {
                         if(topBarIsVisible.value){
-                            topBarView(navController)
+                            TopBarView(navController)
                         }
                     }
                 ) { innerPadding ->
