@@ -33,7 +33,7 @@ fun TopBarView(
     TopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
-            titleContentColor = MaterialTheme.colorScheme.primary,
+            titleContentColor = MaterialTheme.colorScheme.background,
         ),
         actions = {
             Row(horizontalArrangement = Arrangement.End,
@@ -42,7 +42,7 @@ fun TopBarView(
                 Icon(
                     imageVector = Icons.Outlined.AccountCircle,
                     contentDescription = "Account",
-                    tint = MaterialTheme.colorScheme.primary,
+                    tint = MaterialTheme.colorScheme.background,
                     modifier = Modifier
                         .size(40.dp)
                         .padding(end = 10.dp)
