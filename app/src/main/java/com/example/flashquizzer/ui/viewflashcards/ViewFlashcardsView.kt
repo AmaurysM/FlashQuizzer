@@ -1,6 +1,5 @@
 package com.example.flashquizzer.ui.viewflashcards
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
@@ -9,13 +8,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -41,43 +39,47 @@ fun ViewFlashcardsView(
     viewModel: ViewFlashcardsViewmodel = viewModel()
 ) {
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .scrollable(rememberScrollState(), orientation = Orientation.Vertical)
             .background(MaterialTheme.colorScheme.background)
         , horizontalAlignment = Alignment.CenterHorizontally
     ){
+
         viewModel.getFlashcards().forEach {
-            var currentSide = remember{ mutableStateOf(it.front) }
+            val currentSide = remember{ mutableStateOf(it.front) }
             Row(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(10.dp)
                     .clip(MaterialTheme.shapes.small)
                     .background(MaterialTheme.colorScheme.primary)
                 , verticalAlignment = Alignment.CenterVertically
                 , horizontalArrangement = Arrangement.Center
             ){
-                Box(
-                    modifier = Modifier.weight(.9f)
+                Row(
+                    modifier = Modifier
+                        .weight(.9f)
                         .padding(20.dp)
-                    , contentAlignment = Alignment.Center
+                    , horizontalArrangement = Arrangement.Center
+                    , verticalAlignment = Alignment.CenterVertically
                 ){
                     Text(text = currentSide.value
-                        , style = MaterialTheme.typography.bodyLarge
                         , fontWeight = FontWeight.Bold
-                        , color = MaterialTheme.colorScheme.onPrimary)
+                        , color = Color.Black)
                 }
                 Box(
-                    modifier = Modifier.weight(.1f)
+                    modifier = Modifier
+                        .weight(.1f)
                         .background(MaterialTheme.colorScheme.onSurface)
                         .padding(vertical = 20.dp)
-                        .clickable{
-                                viewModel.flipCard(it, currentSide);
-                                Log.d("flip card", "clicked")
-                            }
+                        .clickable {
+                            viewModel.flipCard(it, currentSide);
+                        }
                     , contentAlignment = Alignment.CenterEnd
                 ){
                     Icon(
-                        imageVector = Icons.Default.ArrowForward
+                        imageVector = Icons.AutoMirrored.Filled.ArrowForward
                         , contentDescription = "arrow forward"
                         , tint = MaterialTheme.colorScheme.onSurfaceVariant
                         , modifier = Modifier.padding(end = 6.dp)
