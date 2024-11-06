@@ -22,13 +22,13 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            var topBarIsVisible = remember {mutableStateOf(true)}
+            var topBarIsVisible = remember { mutableStateOf(true) }
             var navController = rememberNavController()
             FlashQuizzerTheme {
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
                     topBar = {
-                        if(topBarIsVisible.value){
+                        if (topBarIsVisible.value) {
                             TopBarView(navController)
                         }
                     }
@@ -36,7 +36,7 @@ class MainActivity : ComponentActivity() {
                     FlashQuizzerNavigation(
                         navController,
                         modifier = Modifier.padding(innerPadding)
-                    ){ topBarVisible ->
+                    ) { topBarVisible ->
                         topBarIsVisible.value = topBarVisible
                     }
                 }
