@@ -5,9 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
-import com.example.flashquizzer.navigation.FlashQuizzerDestinations
 import com.example.flashquizzer.model.AuthManager
 import com.example.flashquizzer.model.RegisterData
+import com.example.flashquizzer.navigation.FlashQuizzerDestinations
 
 class RegisterViewmodel : ViewModel() {
 
