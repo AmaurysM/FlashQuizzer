@@ -9,8 +9,8 @@ class ViewFlashcardsViewmodel : ViewModel() {
     fun getFlashcards(): List<Flashcard> {
         // TODO: Implement getting flashcards from firebase
         return listOf(
-            Flashcard("What is the capital of France?", "Paris")
-            , Flashcard("What is the capital of Germany?", "Berlin")
+            Flashcard("What is the capital of France?", "Paris"),
+            Flashcard("What is the capital of Germany?", "Berlin")
         )
     }
 
