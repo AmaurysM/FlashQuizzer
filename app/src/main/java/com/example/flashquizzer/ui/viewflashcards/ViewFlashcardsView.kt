@@ -42,31 +42,31 @@ fun ViewFlashcardsView(
         modifier = Modifier
             .fillMaxSize()
             .scrollable(rememberScrollState(), orientation = Orientation.Vertical)
-            .background(MaterialTheme.colorScheme.background)
-        , horizontalAlignment = Alignment.CenterHorizontally
-    ){
+            .background(MaterialTheme.colorScheme.background),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
 
         viewModel.getFlashcards().forEach {
-            val currentSide = remember{ mutableStateOf(it.front) }
+            val currentSide = remember { mutableStateOf(it.front) }
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(10.dp)
                     .clip(MaterialTheme.shapes.small)
-                    .background(MaterialTheme.colorScheme.primary)
-                , verticalAlignment = Alignment.CenterVertically
-                , horizontalArrangement = Arrangement.Center
-            ){
+                    .background(MaterialTheme.colorScheme.primary),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
                 Row(
                     modifier = Modifier
                         .weight(.9f)
-                        .padding(20.dp)
-                    , horizontalArrangement = Arrangement.Center
-                    , verticalAlignment = Alignment.CenterVertically
-                ){
-                    Text(text = currentSide.value
-                        , fontWeight = FontWeight.Bold
-                        , color = Color.Black)
+                        .padding(20.dp),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = currentSide.value, fontWeight = FontWeight.Bold, color = Color.Black
+                    )
                 }
                 Box(
                     modifier = Modifier
@@ -75,14 +75,13 @@ fun ViewFlashcardsView(
                         .padding(vertical = 20.dp)
                         .clickable {
                             viewModel.flipCard(it, currentSide);
-                        }
-                    , contentAlignment = Alignment.CenterEnd
-                ){
+                        }, contentAlignment = Alignment.CenterEnd
+                ) {
                     Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowForward
-                        , contentDescription = "arrow forward"
-                        , tint = MaterialTheme.colorScheme.onSurfaceVariant
-                        , modifier = Modifier.padding(end = 6.dp)
+                        imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                        contentDescription = "arrow forward",
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(end = 6.dp)
                     )
                 }
             }

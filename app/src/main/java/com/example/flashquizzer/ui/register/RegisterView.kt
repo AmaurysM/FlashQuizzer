@@ -20,9 +20,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.flashquizzer.navigation.FlashQuizzerDestinations
 import com.example.flashquizzer.model.AuthManager
 import com.example.flashquizzer.model.AuthState
+import com.example.flashquizzer.navigation.FlashQuizzerDestinations
 
 @Composable
 fun RegisterView(
@@ -56,13 +56,17 @@ fun RegisterView(
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             value = viewModel.registerData.email,
-            onValueChange = { newEmail: String -> viewModel.registerData = viewModel.registerData.copy(email = newEmail) },
-           label = { Text(text = "Email") }
+            onValueChange = { newEmail: String ->
+                viewModel.registerData = viewModel.registerData.copy(email = newEmail)
+            },
+            label = { Text(text = "Email") }
         )
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             value = viewModel.registerData.password,
-            onValueChange = { newPassword: String -> viewModel.registerData = viewModel.registerData.copy(password = newPassword) },
+            onValueChange = { newPassword: String ->
+                viewModel.registerData = viewModel.registerData.copy(password = newPassword)
+            },
             label = { Text(text = "Password") }
         )
 

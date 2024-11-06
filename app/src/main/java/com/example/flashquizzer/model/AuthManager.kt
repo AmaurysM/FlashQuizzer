@@ -10,15 +10,13 @@ object AuthManager {
     val authState: LiveData<AuthState> = _authState
 
     init {
-        checkAuthStatus()
-    }
-
-    fun checkAuthStatus() {
-        if (auth.currentUser == null) {
-            _authState.value = AuthState.Unauthenticated
-        } else {
-            _authState.value = AuthState.Authenticated
-
+        //checkAuthStatus()
+        auth.addAuthStateListener { firebaseAuth ->
+            if (firebaseAuth.currentUser == null) {
+                _authState.value = AuthState.Unauthenticated
+            } else {
+                _authState.value = AuthState.Authenticated
+            }
         }
     }
 

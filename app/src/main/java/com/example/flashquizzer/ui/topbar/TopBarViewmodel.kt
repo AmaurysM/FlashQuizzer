@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import com.example.flashquizzer.navigation.FlashQuizzerDestinations
 
-class TopBarViewmodel: ViewModel() {
+class TopBarViewmodel : ViewModel() {
 
     private var title by mutableStateOf("")
 
