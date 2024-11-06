@@ -13,7 +13,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -22,7 +22,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.flashquizzer.model.AuthManager
 import com.example.flashquizzer.model.AuthState
 
 @Preview(showBackground = true)
@@ -30,9 +29,8 @@ import com.example.flashquizzer.model.AuthState
 fun HomePageView(
     navController: NavHostController = rememberNavController(),
     modifier: Modifier = Modifier,
-    viewModel: HomePageViewmodel = viewModel()
+    viewModel: HomePageViewmodel = viewModel(),
 ) {
-    val authState = AuthManager.authState.observeAsState()
 
     Column(
         modifier = modifier.fillMaxSize(),
@@ -48,7 +46,8 @@ fun HomePageView(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Button(onClick = { viewModel.goUploadDoc(navController) },
+            Button(
+                onClick = { viewModel.goUploadDoc(navController) },
                 modifier = Modifier.padding(bottom = 10.dp)
             ) {
                 Text(text = "Upload Document")
@@ -61,7 +60,8 @@ fun HomePageView(
                 Text(text = "Create Flashcards")
 
             }
-            Button(onClick = { viewModel.goTakeQuiz(navController) },
+            Button(
+                onClick = { viewModel.goTakeQuiz(navController) },
                 modifier = Modifier.padding(bottom = 10.dp)
             ) {
                 Text(text = "Take Quiz")
@@ -75,7 +75,8 @@ fun HomePageView(
             modifier = Modifier.size(100.dp),
             tint = MaterialTheme.colorScheme.primary
         )
-        if (authState.value == AuthState.Unauthenticated) {
+
+        if (viewModel.authState.collectAsState().value == AuthState.Unauthenticated) {
             Row(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically

@@ -13,12 +13,11 @@ import com.example.flashquizzer.ui.takequiz.TakeQuizView
 import com.example.flashquizzer.ui.uploaddoc.UploadDocView
 import com.example.flashquizzer.ui.viewflashcards.ViewFlashcardsView
 
-
 @Composable
 fun FlashQuizzerNavigation(
     navController: NavHostController = rememberNavController(),
     modifier: Modifier = Modifier,
-    topBarIsVisible: (Boolean) -> Unit = { input -> input}
+    topBarIsVisible: (Boolean) -> Unit = { it -> it }
 ) {
 
     NavHost(
