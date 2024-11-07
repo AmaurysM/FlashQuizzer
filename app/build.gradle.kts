@@ -41,7 +41,11 @@ android {
 }
 
 dependencies {
-
+    implementation ("com.google.firebase:firebase-storage-ktx:20.2.0")
+    implementation ("androidx.navigation:navigation-compose:2.7.5")
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
+    implementation ("androidx.activity:activity-compose:1.7.0")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.0")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -54,6 +58,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.firebase.auth)
     implementation(libs.androidx.runtime.livedata)
+    implementation(libs.firebase.database)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
