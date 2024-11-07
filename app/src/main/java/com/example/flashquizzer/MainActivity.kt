@@ -22,24 +22,30 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            var topBarIsVisible = remember {mutableStateOf(true)}
-            var navController = rememberNavController()
-            FlashQuizzerTheme {
-                Scaffold(
-                    modifier = Modifier.fillMaxSize(),
-                    topBar = {
-                        if(topBarIsVisible.value){
-                            TopBarView(navController)
-                        }
-                    }
-                ) { innerPadding ->
-                    FlashQuizzerNavigation(
-                        navController,
-                        modifier = Modifier.padding(innerPadding)
-                    ){ topBarVisible ->
-                        topBarIsVisible.value = topBarVisible
-                    }
+            FlashQuizzerApp()
+        }
+    }
+}
+
+@Composable
+fun FlashQuizzerApp() {
+    var topBarIsVisible = remember { mutableStateOf(true) }
+    val navController = rememberNavController()
+
+    FlashQuizzerTheme {
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            topBar = {
+                if (topBarIsVisible.value) {
+                    TopBarView(navController)
                 }
+            }
+        ) { innerPadding ->
+            FlashQuizzerNavigation(
+                navController = navController,
+                modifier = Modifier.padding(innerPadding)
+            ) { topBarVisible ->
+                topBarIsVisible.value = topBarVisible
             }
         }
     }
@@ -47,8 +53,8 @@ class MainActivity : ComponentActivity() {
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun AppPreview() {
     FlashQuizzerTheme {
-        FlashQuizzerNavigation()
+        FlashQuizzerApp()
     }
 }

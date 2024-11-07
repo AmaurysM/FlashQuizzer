@@ -12,34 +12,15 @@ class TopBarViewmodel: ViewModel() {
     private var title by mutableStateOf("")
 
     val topBarTitle: (NavHostController) -> String = { navController ->
-        when (navController.currentBackStackEntry?.destination?.route) {
-            FlashQuizzerDestinations.Home.route -> {
-                title = FlashQuizzerDestinations.Home.title
-                title
-            }
-            FlashQuizzerDestinations.UploadDoc.route -> {
-                title = FlashQuizzerDestinations.UploadDoc.title
-                title
-            }
-            FlashQuizzerDestinations.ViewFlashcards.route -> {
-                title = FlashQuizzerDestinations.ViewFlashcards.title
-                title
-            }
-            FlashQuizzerDestinations.TakeQuiz.route -> {
-                title = FlashQuizzerDestinations.TakeQuiz.title
-                title
-            }
-            FlashQuizzerDestinations.Login.route -> {
-                title = FlashQuizzerDestinations.Login.title
-                title
-            }
-            FlashQuizzerDestinations.Register.route -> {
-                title = FlashQuizzerDestinations.Register.title
-                title
-            }
-            else -> {
-                title
-            }
+        title = when (navController.currentBackStackEntry?.destination?.route) {
+            FlashQuizzerDestinations.Home.route -> "Home"
+            FlashQuizzerDestinations.UploadDoc.route -> "Upload Document"
+            FlashQuizzerDestinations.ViewFlashcards.route -> "Flashcards"
+            FlashQuizzerDestinations.TakeQuiz.route -> "Quiz"
+            FlashQuizzerDestinations.Login.route -> "Login"
+            FlashQuizzerDestinations.Register.route -> "Register"
+            else -> ""
         }
+        title
     }
-}
+    }

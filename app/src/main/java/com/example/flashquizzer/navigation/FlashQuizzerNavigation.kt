@@ -14,13 +14,15 @@ import com.example.flashquizzer.ui.uploaddoc.UploadDocView
 import com.example.flashquizzer.ui.viewflashcards.ViewFlashcardsView
 
 
+
+
+
 @Composable
 fun FlashQuizzerNavigation(
     navController: NavHostController = rememberNavController(),
     modifier: Modifier = Modifier,
-    topBarIsVisible: (Boolean) -> Unit = { input -> input}
+    topBarIsVisible: (Boolean) -> Unit = { input -> input }
 ) {
-
     NavHost(
         navController = navController,
         startDestination = FlashQuizzerDestinations.Home.route,
@@ -31,8 +33,11 @@ fun FlashQuizzerNavigation(
             HomePageView(navController, modifier)
         }
         composable(FlashQuizzerDestinations.UploadDoc.route) {
-            topBarIsVisible(false)
-            UploadDocView(navController, modifier)
+            topBarIsVisible(true) // Changed to true to show TopBar with navigation options
+            UploadDocView(
+                navController = navController,
+                modifier = modifier
+            )
         }
         composable(FlashQuizzerDestinations.ViewFlashcards.route) {
             topBarIsVisible(true)
@@ -50,5 +55,14 @@ fun FlashQuizzerNavigation(
             topBarIsVisible(false)
             RegisterView(navController, modifier)
         }
+    }
+}
+
+// Extension function for easier navigation
+fun NavHostController.navigateToDestination(destination: FlashQuizzerDestinations) {
+    this.navigate(destination.route) {
+        // Optional: Add navigation options here
+        launchSingleTop = true
+        restoreState = true
     }
 }
