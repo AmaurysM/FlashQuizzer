@@ -59,6 +59,7 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.androidx.runtime.livedata)
     implementation(libs.firebase.database)
+    implementation(libs.androidx.espresso.core)
     testImplementation(libs.junit)
     implementation(libs.material3)
     implementation(libs.androidx.material.icons.core)
