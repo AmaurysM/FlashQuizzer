@@ -15,7 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.example.flashquizzer.navigation.FlashQuizzerNavigation
 import com.example.flashquizzer.ui.theme.FlashQuizzerTheme
-import com.example.flashquizzer.ui.topbar.TopBarView
+import com.example.flashquizzer.ui.bottomBar.TopBarView
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,14 +29,14 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun FlashQuizzerApp() {
-    var topBarIsVisible = remember { mutableStateOf(true) }
+    var barIsVisible = remember { mutableStateOf(true) }
     val navController = rememberNavController()
 
     FlashQuizzerTheme {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
-            topBar = {
-                if (topBarIsVisible.value) {
+            bottomBar = {
+                if (barIsVisible.value) {
                     TopBarView(navController)
                 }
             }
@@ -44,8 +44,8 @@ fun FlashQuizzerApp() {
             FlashQuizzerNavigation(
                 navController = navController,
                 modifier = Modifier.padding(innerPadding)
-            ) { topBarVisible ->
-                topBarIsVisible.value = topBarVisible
+            ) { barVisible ->
+                barIsVisible.value = barVisible
             }
         }
     }
