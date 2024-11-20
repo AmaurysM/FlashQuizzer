@@ -5,17 +5,32 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.example.flashquizzer.ui.uploaddoc.UploadDocViewModel
+import com.example.flashquizzer.R
 
 @Composable
 fun UploadDocView(
@@ -47,11 +62,36 @@ fun UploadDocView(
 
     Column(
         modifier = modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.Center
     ) {
+        Icon(
+            imageVector = ImageVector.vectorResource( R.drawable.baseline_file_upload),
+            contentDescription = "Upload Icon",
+            modifier = Modifier.size(140.dp)
+        )
+
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.padding(16.dp)
+        ) {
+            Text(
+                text = "Upload Document"
+                , style = MaterialTheme.typography.titleLarge
+                , fontWeight = FontWeight.Bold
+                , modifier = Modifier.padding(bottom = 8.dp)
+            )
+            Text(
+                text = "Simply upload files in .ppt, .doc, or .txt format, and generate flashcards"
+                , style = MaterialTheme.typography.bodyMedium
+                , textAlign = TextAlign.Center
+            )
+        }
+
+
         Button(
             onClick = {
                 val permissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -76,8 +116,9 @@ fun UploadDocView(
                 }
             },
             enabled = !isLoading
+            , shape = MaterialTheme.shapes.medium
         ) {
-            Text(if (isLoading) "Loading..." else "Upload Text Document")
+            Text(if (isLoading) "Loading..." else "Choose File")
         }
 
         if (isLoading) {
