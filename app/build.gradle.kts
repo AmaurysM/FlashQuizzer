@@ -60,6 +60,7 @@ dependencies {
     implementation(libs.androidx.runtime.livedata)
     implementation(libs.firebase.database)
     implementation(libs.androidx.espresso.core)
+    implementation(libs.androidx.room.ktx)
     testImplementation(libs.junit)
     implementation(libs.material3)
     implementation(libs.androidx.material.icons.core)
