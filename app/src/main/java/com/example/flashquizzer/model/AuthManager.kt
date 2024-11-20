@@ -10,7 +10,6 @@ object AuthManager {
     val authState: LiveData<AuthState> = _authState
 
     init {
-        //checkAuthStatus()
         auth.addAuthStateListener { firebaseAuth ->
             if (firebaseAuth.currentUser == null) {
                 _authState.value = AuthState.Unauthenticated
@@ -25,6 +24,11 @@ object AuthManager {
             _authState.value = AuthState.Error("Email or password can't be empty")
             return
         }
+        if (registerData.password != registerData.confirmPassword) {
+            _authState.value = AuthState.Error("Passwords do not match")
+            return
+        }
+
         _authState.value = AuthState.Loading
         auth.createUserWithEmailAndPassword(registerData.email, registerData.password)
             .addOnCompleteListener { task ->
