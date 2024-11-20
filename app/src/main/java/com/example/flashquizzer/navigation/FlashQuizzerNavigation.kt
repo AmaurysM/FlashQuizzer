@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.flashquizzer.ui.homepage.HomePageView
 import com.example.flashquizzer.ui.login.LoginView
+import com.example.flashquizzer.ui.profile.ProfileView
 import com.example.flashquizzer.ui.register.RegisterView
 import com.example.flashquizzer.ui.takequiz.TakeQuizView
 import com.example.flashquizzer.ui.uploaddoc.UploadDocView
@@ -26,15 +27,12 @@ fun FlashQuizzerNavigation(
     ) {
         composable(FlashQuizzerDestinations.Home.route) {
             barIsVisible(true)
-            HomePageView(navController, modifier)
+            HomePageView(navController)
         }
 
         composable(FlashQuizzerDestinations.UploadDoc.route) {
-            barIsVisible(true) // Changed to true to show TopBar with navigation options
-            UploadDocView(
-                navController = navController,
-                modifier = modifier
-            )
+            barIsVisible(true)
+            UploadDocView(navController = navController)
         }
 
         composable(FlashQuizzerDestinations.ViewFlashcards.route) {
@@ -52,6 +50,10 @@ fun FlashQuizzerNavigation(
         composable(FlashQuizzerDestinations.Register.route) {
             barIsVisible(false)
             RegisterView(navController, modifier)
+        }
+        composable(FlashQuizzerDestinations.Profile.route) {
+            barIsVisible(true)
+            ProfileView(navController)
         }
     }
 }
