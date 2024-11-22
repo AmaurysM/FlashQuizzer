@@ -10,6 +10,7 @@ import com.example.flashquizzer.ui.homepage.HomePageView
 import com.example.flashquizzer.ui.login.LoginView
 import com.example.flashquizzer.ui.profile.ProfileView
 import com.example.flashquizzer.ui.register.RegisterView
+import com.example.flashquizzer.ui.splash.SplashView
 import com.example.flashquizzer.ui.takequiz.TakeQuizView
 import com.example.flashquizzer.ui.uploaddoc.UploadDocView
 import com.example.flashquizzer.ui.viewflashcards.ViewFlashcardsView
@@ -22,7 +23,7 @@ fun FlashQuizzerNavigation(
 ) {
     NavHost(
         navController = navController,
-        startDestination = FlashQuizzerDestinations.Login.route,
+        startDestination = FlashQuizzerDestinations.Splash.route,
         modifier = modifier
     ) {
         composable(FlashQuizzerDestinations.Home.route) {
@@ -54,6 +55,11 @@ fun FlashQuizzerNavigation(
         composable(FlashQuizzerDestinations.Profile.route) {
             barIsVisible(true)
             ProfileView(navController)
+        }
+
+        composable(FlashQuizzerDestinations.Splash.route) {
+            barIsVisible(false)
+            SplashView(navController)
         }
     }
 }
