@@ -4,6 +4,7 @@ import com.example.flashquizzer.R
 
 
 sealed class FlashQuizzerDestinations(val route: String, val title: String = "", val icon: Int = 0) {
+    data object Splash : FlashQuizzerDestinations("splash")
     data object ViewFlashcards : FlashQuizzerDestinations("view_flashcards")
     data object TakeQuiz : FlashQuizzerDestinations("take_quiz")
     data object Login : FlashQuizzerDestinations("login")
