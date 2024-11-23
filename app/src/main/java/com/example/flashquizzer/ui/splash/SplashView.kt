@@ -29,7 +29,6 @@ fun SplashView(
     viewModel: SplashViewModel = viewModel()
 ) {
     val authState = AuthManager.authState.observeAsState()
-    val contextForToast = LocalContext.current.applicationContext
 
     LaunchedEffect(Unit) {
         launch(Dispatchers.Main) {
@@ -38,14 +37,18 @@ fun SplashView(
     }
 
     Column(
-        modifier = modifier.fillMaxSize().background(MaterialTheme.colorScheme.primary),
+        modifier = modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.primary),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Flash Quizzer"
-            , style = MaterialTheme.typography.headlineLarge
-            , color = MaterialTheme.colorScheme.background
-            , fontWeight = FontWeight.Bold)
+        Text(
+            text = "Flash Quizzer",
+            style = MaterialTheme.typography.headlineLarge,
+            color = MaterialTheme.colorScheme.background,
+            fontWeight = FontWeight.Bold
+        )
     }
 
 }

@@ -154,7 +154,7 @@ fun RegisterView(
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ){
             Button(onClick = {
-                viewModel.register()
+                viewModel.register(navHostController)
             }
                 , modifier = Modifier.fillMaxWidth()
                 , shape = MaterialTheme.shapes.small

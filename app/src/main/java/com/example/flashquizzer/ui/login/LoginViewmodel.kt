@@ -1,5 +1,6 @@
 package com.example.flashquizzer.ui.login
 
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -7,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import com.example.flashquizzer.R
 import com.example.flashquizzer.model.AuthManager
+import com.example.flashquizzer.model.AuthState
 import com.example.flashquizzer.model.LoginData
 import com.example.flashquizzer.navigation.FlashQuizzerDestinations
 
@@ -27,8 +29,8 @@ class LoginViewmodel : ViewModel() {
         passwordVisible = !passwordVisible
     }
 
-    fun login() {
-        AuthManager.login(loginData, loginInputEmpty())
+    fun login(navHostController: NavHostController) {
+        AuthManager.login(loginData, navHostController)
     }
 
     fun loginInputEmpty(): Boolean {

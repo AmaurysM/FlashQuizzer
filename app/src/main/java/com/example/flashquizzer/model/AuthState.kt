@@ -1,8 +1,10 @@
 package com.example.flashquizzer.model
 
-sealed class AuthState {
-    object Authenticated : AuthState()
-    object Unauthenticated : AuthState()
+import com.example.flashquizzer.navigation.FlashQuizzerDestinations
+
+sealed class AuthState(val destination: FlashQuizzerDestinations? = null) {
+    object Authenticated : AuthState( FlashQuizzerDestinations.Home)
+    object Unauthenticated : AuthState( FlashQuizzerDestinations.Login)
     object Loading : AuthState()
     data class Error(val message: String) : AuthState()
 }
