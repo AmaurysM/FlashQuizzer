@@ -15,6 +15,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -27,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.flashquizzer.model.AuthManager
 
 @Preview(showBackground = true)
 @Composable
@@ -35,7 +37,6 @@ fun LoginView(
     modifier: Modifier = Modifier,
     viewModel: LoginViewmodel = viewModel()
 ) {
-
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -85,7 +86,7 @@ fun LoginView(
                 )
             )
             Button(onClick = {
-                viewModel.login()
+                viewModel.login(navHostController)
             }
                 , modifier = Modifier.fillMaxWidth()
                 , shape = RoundedCornerShape(8.dp)

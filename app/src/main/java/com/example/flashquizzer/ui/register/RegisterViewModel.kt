@@ -43,8 +43,8 @@ class RegisterViewmodel : ViewModel() {
         confirmPasswordVisible = !confirmPasswordVisible
     }
 
-    fun register() {
-        AuthManager.register(registerData, registerInputEmpty())
+    fun register(navHostController: NavHostController) {
+        AuthManager.register(registerData, navHostController)
     }
 
     fun registerInputEmpty(): Boolean {
