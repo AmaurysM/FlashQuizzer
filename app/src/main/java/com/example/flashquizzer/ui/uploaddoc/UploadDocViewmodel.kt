@@ -5,6 +5,8 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,6 +27,8 @@ class UploadDocViewModel : ViewModel() {
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error.asStateFlow()
 
+    private val firestore = FirebaseFirestore.getInstance()
+
     fun readTextAndUploadToFirebase(context: Context, uri: Uri) {
         viewModelScope.launch {
             _isLoading.value = true
@@ -42,7 +46,7 @@ class UploadDocViewModel : ViewModel() {
                 }
                 Log.d("UploadDocViewModel", "File Content: ${stringBuilder.toString()}")  // Log content
                 _documentContent.value = stringBuilder.toString()
-                uploadTextToFirebase(stringBuilder.toString())
+                ensureUserCollectionExistsAndUpload(stringBuilder.toString())
                 _error.value = null
             } catch (e: Exception) {
                 _error.value = "Error reading document: ${e.message}"
@@ -53,10 +57,40 @@ class UploadDocViewModel : ViewModel() {
         }
     }
 
+    private fun ensureUserCollectionExistsAndUpload(content: String) {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        if (currentUser == null) {
+            _error.value = "User not logged in"
+            return
+        }
 
-    private fun uploadTextToFirebase(content: String) {
+        val userId = currentUser.uid
+        val userDocRef = firestore.collection("users").document(userId)
+
+        userDocRef.get().addOnSuccessListener { documentSnapshot ->
+            if (!documentSnapshot.exists()) {
+                // If user document doesn't exist, create it
+                userDocRef.set(mapOf("initialized" to true)).addOnSuccessListener {
+                    Log.d("UploadDocViewModel", "User collection created")
+                    uploadTextToFirebase(userId, content)
+                }.addOnFailureListener { e ->
+                    _error.value = "Failed to create user collection: ${e.message}"
+                }
+            } else {
+                uploadTextToFirebase(userId, content)
+            }
+        }.addOnFailureListener { e ->
+            _error.value = "Error checking user collection: ${e.message}"
+        }
+    }
+
+
+
+    private fun uploadTextToFirebase(userId: String, content: String) {
+
         val storageRef = Firebase.storage.reference
-        val docRef = storageRef.child("documents/test_document.txt")
+        val fileName = "document_${System.currentTimeMillis()}.txt"
+        val docRef = storageRef.child("uploads/$userId/documents/$fileName")
         val contentBytes = content.toByteArray(Charset.forName("UTF-8"))
 
         docRef.putBytes(contentBytes)
@@ -65,8 +99,22 @@ class UploadDocViewModel : ViewModel() {
                 // Fetch download URL after a successful upload
                 docRef.downloadUrl.addOnSuccessListener { uri ->
                     Log.d("UploadDocViewModel", "Download URL: $uri")
-                    // Save or display the URL as needed
-                    // Example: _documentUrl.value = uri.toString()
+                    val documentMetadata = mapOf(
+                        "fileName" to fileName,
+                        "downloadUrl" to uri.toString(),
+                        "timestamp" to System.currentTimeMillis()
+                    )
+                    firestore.collection("users")
+                        .document(userId)
+                        .collection("documents") // Collection under each user to store documents metadata
+                        .add(documentMetadata)
+                        .addOnSuccessListener {
+                            Log.d("UploadDocViewModel", "Document metadata saved to Firestore")
+                        }
+                        .addOnFailureListener { e ->
+                            _error.value = "Failed to save metadata: ${e.message}"
+                            Log.e("UploadDocViewModel", "Failed to save metadata", e)
+                        }
                 }
             }
             .addOnFailureListener { e ->
@@ -75,22 +123,41 @@ class UploadDocViewModel : ViewModel() {
     }
 
     fun downloadTextFromFirebase() {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        if (currentUser == null) {
+            _error.value = "User not logged in"
+            return
+        }
+
+        val userId = currentUser.uid
         val storageRef = Firebase.storage.reference
-        val docRef = storageRef.child("documents/test_document.txt")
+        val documentsRef = storageRef.child("uploads/$userId/documents/")
+
 
         // Download up to 1MB of file content (adjust size if needed)
-        docRef.getBytes(1024 * 1024)
-            .addOnSuccessListener { bytes ->
-                val content = String(bytes, Charset.forName("UTF-8"))
-                Log.d("UploadDocViewModel", "Downloaded content: $content")
-                // Process or display content as needed
-                _documentContent.value = content
+        documentsRef.listAll()
+            .addOnSuccessListener { listResult ->
+                if (listResult.items.isNotEmpty()) {
+                    val latestFileRef = listResult.items.last()
+                    latestFileRef.getBytes(1024 * 1024)
+                        .addOnSuccessListener { bytes ->
+                            val content = String(bytes, Charset.forName("UTF-8"))
+                            Log.d("UploadDocViewModel", "Downloaded content: $content")
+                            _documentContent.value = content
+                        }
+                        .addOnFailureListener { e ->
+                            _error.value = "Download failed: ${e.message}"
+                            Log.e("UploadDocViewModel", "Download failed", e)
+                        }
+                } else {
+                    _error.value = "No documents found for this user."
+                }
             }
             .addOnFailureListener { e ->
-                _error.value = "Download failed: ${e.message}"
+                _error.value = "Failed to list documents: ${e.message}"
+                Log.e("UploadDocViewModel", "Failed to list documents", e)
             }
     }
-
 }
 
 
