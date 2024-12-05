@@ -1,25 +1,21 @@
-package com.example.flashquizzer.ui.uploaddoc
-
 import android.content.Context
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.nio.charset.Charset
+import org.apache.poi.xslf.usermodel.XMLSlideShow
+import org.apache.poi.xwpf.usermodel.XWPFDocument
+import java.io.InputStream
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class UploadDocViewModel : ViewModel() {
-    private val _documentContent = MutableStateFlow<String?>(null)
-    val documentContent: StateFlow<String?> = _documentContent.asStateFlow()
+    private val _flashcards = MutableStateFlow<List<String>>(emptyList())
+    val flashcards: StateFlow<List<String>> = _flashcards.asStateFlow()
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
@@ -27,26 +23,27 @@ class UploadDocViewModel : ViewModel() {
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error.asStateFlow()
 
-    private val firestore = FirebaseFirestore.getInstance()
+    private val retrofit = Retrofit.Builder()
+        .baseUrl("https://api.openai.com/")
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
 
-    fun readTextAndUploadToFirebase(context: Context, uri: Uri) {
+    private val service = retrofit.create(OpenAIService::class.java)
+
+    fun extractTextFromFile(context: Context, uri: Uri) {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                Log.d("UploadDocViewModel", "Reading URI: $uri")  // Log URI
-                val stringBuilder = StringBuilder()
-                context.contentResolver.openInputStream(uri)?.use { inputStream ->
-                    BufferedReader(InputStreamReader(inputStream, Charset.forName("UTF-8"))).use { reader ->
-                        var line: String? = reader.readLine()
-                        while (line != null) {
-                            stringBuilder.append(line).append('\n')
-                            line = reader.readLine()
-                        }
-                    }
+                val mimeType = context.contentResolver.getType(uri) ?: ""
+                val inputStream = context.contentResolver.openInputStream(uri)
+
+                val extractedText = when {
+                    mimeType.contains("application/vnd.openxmlformats-officedocument.wordprocessingml.document") -> extractTextFromDocx(inputStream!!)
+                    mimeType.contains("application/vnd.openxmlformats-officedocument.presentationml.presentation") -> extractTextFromPptx(inputStream!!)
+                    else -> "Unsupported file type."
                 }
-                Log.d("UploadDocViewModel", "File Content: ${stringBuilder.toString()}")  // Log content
-                _documentContent.value = stringBuilder.toString()
-                ensureUserCollectionExistsAndUpload(stringBuilder.toString())
+
+                generateFlashcards(extractedText)
                 _error.value = null
             } catch (e: Exception) {
                 _error.value = "Error reading document: ${e.message}"
@@ -57,107 +54,59 @@ class UploadDocViewModel : ViewModel() {
         }
     }
 
-    private fun ensureUserCollectionExistsAndUpload(content: String) {
-        val currentUser = FirebaseAuth.getInstance().currentUser
-        if (currentUser == null) {
-            _error.value = "User not logged in"
-            return
-        }
+    private suspend fun generateFlashcards(content: String) {
+        try {
+            val request = OpenAIRequest(
+                model = "gpt-4",
+                messages = listOf(
+                    Message(role = "system", content = "You are an assistant that generates flashcards from provided text."),
+                    Message(role = "user", content = """
+            Given the following text, generate 2 flashcards in the following format:
 
-        val userId = currentUser.uid
-        val userDocRef = firestore.collection("users").document(userId)
+            Question: [Your question here]
+            Answer: [Your answer here]
 
-        userDocRef.get().addOnSuccessListener { documentSnapshot ->
-            if (!documentSnapshot.exists()) {
-                // If user document doesn't exist, create it
-                userDocRef.set(mapOf("initialized" to true)).addOnSuccessListener {
-                    Log.d("UploadDocViewModel", "User collection created")
-                    uploadTextToFirebase(userId, content)
-                }.addOnFailureListener { e ->
-                    _error.value = "Failed to create user collection: ${e.message}"
-                }
-            } else {
-                uploadTextToFirebase(userId, content)
-            }
-        }.addOnFailureListener { e ->
-            _error.value = "Error checking user collection: ${e.message}"
+            The flashcards should be related to the key concepts from the provided text.
+
+            Text: 
+            $content
+        """)
+                ),
+                max_tokens = 150,
+                temperature = 0.7
+            )
+
+            val response = service.generateFlashcards(request)
+            val flashcards = response.choices.first().message.content.trim().split('\n')
+            _flashcards.value = flashcards
+
+        } catch (e: Exception) {
+            _error.value = "Error generating flashcards: ${e.message}"
+            Log.e("UploadDocViewModel", "Error generating flashcards", e)
         }
     }
 
-
-
-    private fun uploadTextToFirebase(userId: String, content: String) {
-
-        val storageRef = Firebase.storage.reference
-        val fileName = "document_${System.currentTimeMillis()}.txt"
-        val docRef = storageRef.child("uploads/$userId/documents/$fileName")
-        val contentBytes = content.toByteArray(Charset.forName("UTF-8"))
-
-        docRef.putBytes(contentBytes)
-            .addOnSuccessListener {
-                Log.d("UploadDocViewModel", "Document uploaded successfully")
-                // Fetch download URL after a successful upload
-                docRef.downloadUrl.addOnSuccessListener { uri ->
-                    Log.d("UploadDocViewModel", "Download URL: $uri")
-                    val documentMetadata = mapOf(
-                        "fileName" to fileName,
-                        "downloadUrl" to uri.toString(),
-                        "timestamp" to System.currentTimeMillis()
-                    )
-                    firestore.collection("users")
-                        .document(userId)
-                        .collection("documents") // Collection under each user to store documents metadata
-                        .add(documentMetadata)
-                        .addOnSuccessListener {
-                            Log.d("UploadDocViewModel", "Document metadata saved to Firestore")
-                        }
-                        .addOnFailureListener { e ->
-                            _error.value = "Failed to save metadata: ${e.message}"
-                            Log.e("UploadDocViewModel", "Failed to save metadata", e)
-                        }
-                }
+    private fun extractTextFromDocx(inputStream: InputStream): String {
+        XWPFDocument(inputStream).use { docx ->
+            val textBuilder = StringBuilder()
+            for (paragraph in docx.paragraphs) {
+                textBuilder.append(paragraph.text).append("\n")
             }
-            .addOnFailureListener { e ->
-                _error.value = "Upload failed: ${e.message}"
-            }
+            return textBuilder.toString()
+        }
     }
 
-    fun downloadTextFromFirebase() {
-        val currentUser = FirebaseAuth.getInstance().currentUser
-        if (currentUser == null) {
-            _error.value = "User not logged in"
-            return
-        }
-
-        val userId = currentUser.uid
-        val storageRef = Firebase.storage.reference
-        val documentsRef = storageRef.child("uploads/$userId/documents/")
-
-
-        // Download up to 1MB of file content (adjust size if needed)
-        documentsRef.listAll()
-            .addOnSuccessListener { listResult ->
-                if (listResult.items.isNotEmpty()) {
-                    val latestFileRef = listResult.items.last()
-                    latestFileRef.getBytes(1024 * 1024)
-                        .addOnSuccessListener { bytes ->
-                            val content = String(bytes, Charset.forName("UTF-8"))
-                            Log.d("UploadDocViewModel", "Downloaded content: $content")
-                            _documentContent.value = content
-                        }
-                        .addOnFailureListener { e ->
-                            _error.value = "Download failed: ${e.message}"
-                            Log.e("UploadDocViewModel", "Download failed", e)
-                        }
-                } else {
-                    _error.value = "No documents found for this user."
+    private fun extractTextFromPptx(inputStream: InputStream): String {
+        XMLSlideShow(inputStream).use { pptx ->
+            val textBuilder = StringBuilder()
+            for (slide in pptx.slides) {
+                for (shape in slide.shapes) {
+                    if (shape is org.apache.poi.xslf.usermodel.XSLFTextShape) {
+                        textBuilder.append(shape.text).append("\n")
+                    }
                 }
             }
-            .addOnFailureListener { e ->
-                _error.value = "Failed to list documents: ${e.message}"
-                Log.e("UploadDocViewModel", "Failed to list documents", e)
-            }
+            return textBuilder.toString()
+        }
     }
 }
-
-

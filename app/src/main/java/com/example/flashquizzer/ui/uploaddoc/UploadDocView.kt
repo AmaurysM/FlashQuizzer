@@ -1,21 +1,18 @@
 package com.example.flashquizzer.ui.uploaddoc
 
+import UploadDocViewModel
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -39,24 +36,22 @@ fun UploadDocView(
     viewModel: UploadDocViewModel = viewModel()
 ) {
     val context = LocalContext.current
-    val documentContent by viewModel.documentContent.collectAsState()
+    val flashcards by viewModel.flashcards.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val error by viewModel.error.collectAsState()
 
-    // Document picker launcher
     val documentLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri ->
-        uri?.let { viewModel.readTextAndUploadToFirebase(context, it) }
+        uri?.let { viewModel.extractTextFromFile(context = context, uri = it) }
     }
 
-    // Multiple permissions launcher
     val multiplePermissionsLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { permissions ->
         val allPermissionsGranted = permissions.values.all { it }
         if (allPermissionsGranted) {
-            documentLauncher.launch("text/*")
+            documentLauncher.launch("application/*")
         }
     }
 
@@ -68,7 +63,7 @@ fun UploadDocView(
         verticalArrangement = Arrangement.Center
     ) {
         Icon(
-            imageVector = ImageVector.vectorResource( R.drawable.baseline_file_upload),
+            imageVector = ImageVector.vectorResource(R.drawable.baseline_file_upload),
             contentDescription = "Upload Icon",
             modifier = Modifier.size(140.dp)
         )
@@ -79,18 +74,17 @@ fun UploadDocView(
             modifier = Modifier.padding(16.dp)
         ) {
             Text(
-                text = "Upload Document"
-                , style = MaterialTheme.typography.titleLarge
-                , fontWeight = FontWeight.Bold
-                , modifier = Modifier.padding(bottom = 8.dp)
+                text = "Upload Document",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 8.dp)
             )
             Text(
-                text = "Simply upload files in .ppt, .doc, or .txt format, and generate flashcards"
-                , style = MaterialTheme.typography.bodyMedium
-                , textAlign = TextAlign.Center
+                text = "Select a .docx or .pptx file to upload and process.",
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = TextAlign.Center
             )
         }
-
 
         Button(
             onClick = {
@@ -104,19 +98,18 @@ fun UploadDocView(
                     arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
                 }
 
-                // Check if all permissions are granted
                 val allPermissionsGranted = permissions.all {
                     ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
                 }
 
                 if (allPermissionsGranted) {
-                    documentLauncher.launch("text/*")
+                    documentLauncher.launch("application/*")
                 } else {
                     multiplePermissionsLauncher.launch(permissions)
                 }
             },
-            enabled = !isLoading
-            , shape = MaterialTheme.shapes.medium
+            enabled = !isLoading,
+            shape = MaterialTheme.shapes.medium
         ) {
             Text(if (isLoading) "Loading..." else "Choose File")
         }
@@ -132,17 +125,17 @@ fun UploadDocView(
             )
         }
 
-        documentContent?.let { content ->
-            Text(
-                text = "Document content:",
-                style = MaterialTheme.typography.titleMedium
-            )
-            Text(
-                text = content,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-            )
+        if (flashcards.isNotEmpty()) {
+            Text(text = "Generated Flashcards:", style = MaterialTheme.typography.titleMedium)
+            flashcards.forEachIndexed { index, flashcard ->
+                Text(
+                    text = "${index + 1}. $flashcard",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
         }
     }
 }
