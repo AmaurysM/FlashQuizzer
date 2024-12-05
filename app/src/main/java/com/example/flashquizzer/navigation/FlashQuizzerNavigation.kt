@@ -13,6 +13,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.flashquizzer.model.AuthManager
 import com.example.flashquizzer.model.AuthState
+import com.example.flashquizzer.ui.flashcards.SelectFlashcardsView
+import com.example.flashquizzer.ui.folder.FolderContentView
 import com.example.flashquizzer.ui.homepage.HomePageView
 import com.example.flashquizzer.ui.login.LoginView
 import com.example.flashquizzer.ui.profile.ProfileView
@@ -20,6 +22,7 @@ import com.example.flashquizzer.ui.register.RegisterView
 import com.example.flashquizzer.ui.splash.SplashView
 import com.example.flashquizzer.ui.takequiz.TakeQuizView
 import com.example.flashquizzer.ui.uploaddoc.UploadDocView
+
 import com.example.flashquizzer.ui.viewflashcards.ViewFlashcardsView
 
 @Composable
@@ -46,7 +49,7 @@ fun FlashQuizzerNavigation(
 
         composable(FlashQuizzerDestinations.ViewFlashcards.route) {
             barIsVisible(true)
-            ViewFlashcardsView(navController, modifier)
+            ViewFlashcardsView(navController)
         }
         composable(FlashQuizzerDestinations.TakeQuiz.route) {
             barIsVisible(true)
@@ -68,6 +71,15 @@ fun FlashQuizzerNavigation(
         composable(FlashQuizzerDestinations.Splash.route) {
             barIsVisible(false)
             SplashView(navController)
+        }
+        composable(FlashQuizzerDestinations.SelectFlashcards.route) {
+            barIsVisible(true)
+            SelectFlashcardsView(navController = navController)
+        }
+
+        composable("folder/{folderId}") { backStackEntry ->
+            val folderId = backStackEntry.arguments?.getString("folderId") ?: return@composable
+            FolderContentView(navController = navController, folderId = folderId)
         }
     }
 }

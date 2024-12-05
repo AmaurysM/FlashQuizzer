@@ -9,6 +9,7 @@ sealed class FlashQuizzerDestinations(val route: String, val title: String = "",
     data object TakeQuiz : FlashQuizzerDestinations("take_quiz")
     data object Login : FlashQuizzerDestinations("login")
     data object Register : FlashQuizzerDestinations("register")
+    data object SelectFlashcards : FlashQuizzerDestinations("selectFlashcards")
 
     data object Home : FlashQuizzerDestinations("home", "Home", R.drawable.baseline_home_filled_24)
     data object UploadDoc : FlashQuizzerDestinations("upload_doc", "Upload", R.drawable.baseline_file_upload)
