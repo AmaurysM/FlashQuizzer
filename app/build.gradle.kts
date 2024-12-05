@@ -70,7 +70,6 @@ dependencies {
     implementation(libs.androidx.espresso.core)
     implementation(libs.androidx.room.ktx)
     implementation(libs.firebase.firestore)
-    //implementation(libs.firebase.firestore.ktx)
     testImplementation(libs.junit)
     implementation(libs.material3)
     implementation(libs.androidx.material.icons.core)
