@@ -6,6 +6,7 @@ plugins {
 }
 
 android {
+
     namespace = "com.example.flashquizzer"
     compileSdk = 34
 
@@ -18,6 +19,8 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
+
+    packagingOptions { resources.excludes.add("META-INF/*") }
 
     buildTypes {
         release {
@@ -39,8 +42,9 @@ android {
         compose = true
     }
 }
-
 dependencies {
+    implementation("org.apache.poi:poi:5.2.3")
+    implementation("org.apache.poi:poi-ooxml:5.2.3")
     implementation ("com.google.firebase:firebase-storage-ktx:20.2.0")
     implementation ("androidx.navigation:navigation-compose:2.7.5")
     implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
@@ -61,7 +65,8 @@ dependencies {
     implementation(libs.firebase.database)
     implementation(libs.androidx.espresso.core)
     implementation(libs.androidx.room.ktx)
-    implementation(libs.firebase.firestore.ktx)
+    implementation(libs.firebase.firestore)
+    //implementation(libs.firebase.firestore.ktx)
     testImplementation(libs.junit)
     implementation(libs.material3)
     implementation(libs.androidx.material.icons.core)

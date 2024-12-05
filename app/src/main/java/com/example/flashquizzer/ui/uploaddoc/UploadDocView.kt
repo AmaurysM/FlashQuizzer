@@ -1,5 +1,6 @@
 package com.example.flashquizzer.ui.uploaddoc
 
+import UploadDocViewModel
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
@@ -47,7 +48,7 @@ fun UploadDocView(
     val documentLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri ->
-        uri?.let { viewModel.readTextAndUploadToFirebase(context, it) }
+        uri?.let { viewModel.extractTextFromFile(context, it) }
     }
 
     // Multiple permissions launcher
@@ -56,7 +57,7 @@ fun UploadDocView(
     ) { permissions ->
         val allPermissionsGranted = permissions.values.all { it }
         if (allPermissionsGranted) {
-            documentLauncher.launch("text/*")
+            documentLauncher.launch("*/*") // Allow all file types
         }
     }
 
@@ -68,7 +69,7 @@ fun UploadDocView(
         verticalArrangement = Arrangement.Center
     ) {
         Icon(
-            imageVector = ImageVector.vectorResource( R.drawable.baseline_file_upload),
+            imageVector = ImageVector.vectorResource(R.drawable.baseline_file_upload),
             contentDescription = "Upload Icon",
             modifier = Modifier.size(140.dp)
         )
@@ -79,18 +80,17 @@ fun UploadDocView(
             modifier = Modifier.padding(16.dp)
         ) {
             Text(
-                text = "Upload Document"
-                , style = MaterialTheme.typography.titleLarge
-                , fontWeight = FontWeight.Bold
-                , modifier = Modifier.padding(bottom = 8.dp)
+                text = "Upload Document",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 8.dp)
             )
             Text(
-                text = "Simply upload files in .ppt, .doc, or .txt format, and generate flashcards"
-                , style = MaterialTheme.typography.bodyMedium
-                , textAlign = TextAlign.Center
+                text = "Select .pdf, .doc, .docx, .ppt, or .txt files to upload and process",
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = TextAlign.Center
             )
         }
-
 
         Button(
             onClick = {
@@ -110,13 +110,13 @@ fun UploadDocView(
                 }
 
                 if (allPermissionsGranted) {
-                    documentLauncher.launch("text/*")
+                    documentLauncher.launch("*/*") // Temporarily allow all files for debugging
                 } else {
                     multiplePermissionsLauncher.launch(permissions)
                 }
             },
-            enabled = !isLoading
-            , shape = MaterialTheme.shapes.medium
+            enabled = !isLoading,
+            shape = MaterialTheme.shapes.medium
         ) {
             Text(if (isLoading) "Loading..." else "Choose File")
         }
