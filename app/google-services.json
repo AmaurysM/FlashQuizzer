@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "23556839174",
+    "project_id": "flash-quizzer",
+    "storage_bucket": "flash-quizzer.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:23556839174:android:614af32ef3d1a606aef087",
+        "android_client_info": {
+          "package_name": "com.example.flashquizzer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAnuLnMa7VlPlPCc-fm9KyhCTfrNf9tFgY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -15,31 +15,37 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.example.flashquizzer.navigation.FlashQuizzerNavigation
 import com.example.flashquizzer.ui.theme.FlashQuizzerTheme
-import com.example.flashquizzer.ui.topbar.TopBarView
+import com.example.flashquizzer.ui.bottomBar.TopBarView
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            var topBarIsVisible = remember {mutableStateOf(true)}
-            var navController = rememberNavController()
-            FlashQuizzerTheme {
-                Scaffold(
-                    modifier = Modifier.fillMaxSize(),
-                    topBar = {
-                        if(topBarIsVisible.value){
-                            TopBarView(navController)
-                        }
-                    }
-                ) { innerPadding ->
-                    FlashQuizzerNavigation(
-                        navController,
-                        modifier = Modifier.padding(innerPadding)
-                    ){ topBarVisible ->
-                        topBarIsVisible.value = topBarVisible
-                    }
+            FlashQuizzerApp()
+        }
+    }
+}
+
+@Composable
+fun FlashQuizzerApp() {
+    var barIsVisible = remember { mutableStateOf(true) }
+    val navController = rememberNavController()
+
+    FlashQuizzerTheme {
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            bottomBar = {
+                if (barIsVisible.value) {
+                    TopBarView(navController)
                 }
+            }
+        ) { innerPadding ->
+            FlashQuizzerNavigation(
+                navController = navController,
+                modifier = Modifier.padding(innerPadding)
+            ) { barVisible ->
+                barIsVisible.value = barVisible
             }
         }
     }
@@ -47,8 +53,8 @@ class MainActivity : ComponentActivity() {
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun AppPreview() {
     FlashQuizzerTheme {
-        FlashQuizzerNavigation()
+        FlashQuizzerApp()
     }
 }
