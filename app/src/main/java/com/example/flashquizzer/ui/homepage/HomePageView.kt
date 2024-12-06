@@ -36,7 +36,7 @@ fun HomePageView( // This is the composable function
     val userFolders by viewModel.userFolders.collectAsState() // Collect the user folders from the view model
     val folderCreation by viewModel.folderCreation
     val newFolderName by viewModel.newFolderName
-    val query by viewModel.query // Collect the query from the view model
+    val query by viewModel.query // Collect the query from the view model.
 
     Box(
         modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center

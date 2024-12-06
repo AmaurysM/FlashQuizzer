@@ -6,5 +6,5 @@ import com.example.flashquizzer.model.AuthManager
 import com.example.flashquizzer.model.AuthState
 
 class FlashQuizzerNavigationViewmodel: ViewModel() {
-
+// .
 }

@@ -28,7 +28,7 @@ class HomePageViewmodel : ViewModel() {
     }
 
     fun onSearch() {
-        // Implement search functionality if needed
+        // Implement search functionality if needed.
     }
 
     fun hasFolders(): Boolean {

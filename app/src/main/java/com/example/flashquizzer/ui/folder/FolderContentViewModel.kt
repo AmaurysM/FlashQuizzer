@@ -35,7 +35,7 @@ class FolderContentViewModel : ViewModel() {
                     .collection("flashcards")
                     .get()
                     .await()
-                // Map the documents to a list of flashcards
+                // Map the documents to a list of flashcards.
                 val flashcardsList = snapshot.documents.mapNotNull { document ->
                     val question = document.getString("question")
                     val answer = document.getString("answer")

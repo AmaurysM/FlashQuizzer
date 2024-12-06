@@ -33,7 +33,7 @@ class ViewFlashcardsViewModel : ViewModel() {
                     .get()
                     .await()
 
-                val flashcardsList = snapshot.documents.mapNotNull { document -> // Map the documents to a list of flashcards
+                val flashcardsList = snapshot.documents.mapNotNull { document -> // Map the documents to a list of flashcards.
                     val question = document.getString("question")
                     val answer = document.getString("answer")
                     if (question != null && answer != null) {

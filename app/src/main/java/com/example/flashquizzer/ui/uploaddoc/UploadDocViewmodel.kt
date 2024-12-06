@@ -41,7 +41,7 @@ class UploadDocViewModel : ViewModel() {
     private val _error = MutableStateFlow<String?>(null) // MutableStateFlow to hold the error message
     val error: StateFlow<String?> = _error.asStateFlow()
 
-    var selectedFolderId: String? = null // Variable to store the selected folder ID
+    var selectedFolderId: String? = null // Variable to store the selected folder ID.
 
     private val firebaseFirestore = FirebaseFirestore.getInstance()
 

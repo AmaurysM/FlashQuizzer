@@ -30,7 +30,7 @@ fun ViewFlashcardsView(
             .background(MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        flashcards.forEach { flashcard -> // Iterate over the list of flashcards
+        flashcards.forEach { flashcard -> // Iterate over the list of flashcards.
             var isFrontSide by remember { mutableStateOf(true) } // State variable to track the side of the flashcard
 
             Card(
