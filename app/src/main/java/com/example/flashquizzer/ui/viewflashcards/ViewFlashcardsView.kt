@@ -2,86 +2,59 @@ package com.example.flashquizzer.ui.viewflashcards
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowForward
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
+import com.example.flashquizzer.model.Flashcard
+import com.example.flashquizzer.viewmodel.ViewFlashcardsViewModel
 
-@Preview(showBackground = true)
 @Composable
 fun ViewFlashcardsView(
-    navController: NavHostController = rememberNavController(),
+    navController: NavHostController,
     modifier: Modifier = Modifier,
-    viewModel: ViewFlashcardsViewmodel = viewModel()
+    viewModel: ViewFlashcardsViewModel = viewModel()
 ) {
+    val flashcards by viewModel.flashcards.collectAsState()
+
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
-            .scrollable(rememberScrollState(), orientation = Orientation.Vertical)
             .background(MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        flashcards.forEach { flashcard -> // Iterate over the list of flashcards
+            var isFrontSide by remember { mutableStateOf(true) } // State variable to track the side of the flashcard
 
-        viewModel.getFlashcards().forEach {
-            val currentSide = remember { mutableStateOf(it.front) }
-            Row(
+            Card(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(10.dp)
-                    .clip(MaterialTheme.shapes.small)
-                    .background(MaterialTheme.colorScheme.primary),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
+                    .clickable {
+                        isFrontSide = !isFrontSide
+                    },
+                shape = MaterialTheme.shapes.medium,
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surface
+                )
             ) {
-                Row(
-                    modifier = Modifier
-                        .weight(.9f)
-                        .padding(20.dp),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = currentSide.value, fontWeight = FontWeight.Bold, color = Color.Black
-                    )
-                }
                 Box(
                     modifier = Modifier
-                        .weight(.1f)
-                        .background(MaterialTheme.colorScheme.onSurface)
-                        .padding(vertical = 20.dp)
-                        .clickable {
-                            viewModel.flipCard(it, currentSide);
-                        }, contentAlignment = Alignment.CenterEnd
+                        .padding(20.dp),
+                    contentAlignment = Alignment.Center
                 ) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                        contentDescription = "arrow forward",
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(end = 6.dp)
+                    Text(
+                        text = if (isFrontSide) flashcard.question else flashcard.answer, // Display the question or answer based on the side of the flashcard
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black,
+                        style = MaterialTheme.typography.bodyLarge
                     )
                 }
             }
