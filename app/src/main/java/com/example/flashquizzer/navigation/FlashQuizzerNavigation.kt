@@ -32,7 +32,7 @@ fun FlashQuizzerNavigation(
     barIsVisible: (Boolean) -> Unit = { input -> input }
 
 ) {
-    NavHost(
+    NavHost( // Create a NavHost
         navController = navController,
         startDestination =FlashQuizzerDestinations.Splash.route,
         modifier = modifier
