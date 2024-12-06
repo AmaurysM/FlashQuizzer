@@ -28,15 +28,15 @@ import com.example.flashquizzer.R
 import com.example.flashquizzer.model.FolderDC
 import com.example.flashquizzer.ui.folder.Folder // This is the composable function
 @Composable
-fun HomePageView(
+fun HomePageView( // This is the composable function
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    viewModel: HomePageViewmodel = viewModel()
+    viewModel: HomePageViewmodel = viewModel() // This is the view model
 ) {
-    val userFolders by viewModel.userFolders.collectAsState()
+    val userFolders by viewModel.userFolders.collectAsState() // Collect the user folders from the view model
     val folderCreation by viewModel.folderCreation
     val newFolderName by viewModel.newFolderName
-    val query by viewModel.query
+    val query by viewModel.query // Collect the query from the view model
 
     Box(
         modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
@@ -86,6 +86,17 @@ fun HomePageView(
                     fontSize = MaterialTheme.typography.bodyLarge.fontSize,
                     color = MaterialTheme.colorScheme.primaryContainer
                 )
+                Button(
+                    onClick = {
+                        viewModel.goCreateFolder() // Navigate to the folder creation screen
+                    }
+                ) {
+                    if (!viewModel.hasFolders()) { // If the user has no folders nothing happens yet
+                        // nothing
+                    } else {
+                        Text(text = "Create a folder")
+                    }
+                }
 
                 if (!viewModel.hasFolders()) {
                     Column(
@@ -117,7 +128,7 @@ fun HomePageView(
             }
         }
 
-        if (folderCreation) {
+        if (folderCreation) { // If the user is creating a folder
             Column(
                 modifier = Modifier
                     .fillMaxSize()

@@ -14,12 +14,13 @@ import com.example.flashquizzer.model.Card
 import com.example.flashquizzer.viewmodel.FolderContentViewModel
 
 @Composable
-fun FolderContentView(
+fun FolderContentView( // This is the composable function
     navController: NavHostController,
     folderId: String,
     modifier: Modifier = Modifier,
-    viewModel: FolderContentViewModel = viewModel()
+    viewModel: FolderContentViewModel = viewModel() // This is the view model
 ) {
+    // Collect the flashcards and loading state from the view model
     val flashcards by viewModel.flashcards.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
 
@@ -54,7 +55,7 @@ fun FolderContentView(
         }
     }
 }
-
+// The FlashcardItem composable function is defined here
 @Composable
 fun FlashcardItem(flashcard: Card) {
     Card(

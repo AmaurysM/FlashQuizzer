@@ -15,7 +15,7 @@ import androidx.navigation.NavHostController
 import com.example.flashquizzer.model.FolderDC
 
 @Composable
-fun Folder(folder: FolderDC, navController: NavHostController) {
+fun Folder(folder: FolderDC, navController: NavHostController) { // This is the composable function
     Column(
         modifier = Modifier
             .clip(shape = RoundedCornerShape(8.dp))
@@ -44,9 +44,9 @@ fun Folder(folder: FolderDC, navController: NavHostController) {
             )
         }
 
-        if (folder.decks == null) {
+        if (folder.decks == null) { // If the folder has no decks
             Button(
-                onClick = { /* TODO: Create A Deck */ },
+                onClick = { /* do nothing */ },
                 shape = RoundedCornerShape(15.dp)
             ) {
                 Icon(Icons.Default.Add, contentDescription = "", modifier = Modifier.size(150.dp))

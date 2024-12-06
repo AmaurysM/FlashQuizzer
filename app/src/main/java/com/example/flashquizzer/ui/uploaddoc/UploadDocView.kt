@@ -30,7 +30,7 @@ fun UploadDocView(
 
     val documentUri = remember { mutableStateOf<Uri?>(null) }
 
-    val launcher = rememberLauncherForActivityResult(
+    val launcher = rememberLauncherForActivityResult( // Use the ActivityResultContracts.OpenDocument contract to open a document
         contract = ActivityResultContracts.OpenDocument()
     ) { uri: Uri? ->
         documentUri.value = uri

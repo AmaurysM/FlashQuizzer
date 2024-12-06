@@ -26,14 +26,14 @@ class ViewFlashcardsViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 // Replace "selectedFolderId" with the actual folder ID you want to load flashcards from
-                val selectedFolderId = "your_folder_id_here"
-                val snapshot = firebaseFirestore.collection("users").document(userId)
+                val selectedFolderId = "your_folder_id_here" // Replace with the actual folder ID, can be updaed
+                val snapshot = firebaseFirestore.collection("users").document(userId) // Update the path to the folder
                     .collection("folders").document(selectedFolderId)
                     .collection("flashcards")
                     .get()
                     .await()
 
-                val flashcardsList = snapshot.documents.mapNotNull { document ->
+                val flashcardsList = snapshot.documents.mapNotNull { document -> // Map the documents to a list of flashcards
                     val question = document.getString("question")
                     val answer = document.getString("answer")
                     if (question != null && answer != null) {

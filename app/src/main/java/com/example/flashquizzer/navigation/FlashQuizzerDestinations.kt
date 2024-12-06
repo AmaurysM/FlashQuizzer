@@ -16,5 +16,6 @@ sealed class FlashQuizzerDestinations(val route: String, val title: String = "",
     data object Profile : FlashQuizzerDestinations("profile", "Profile", R.drawable.baseline_account_circle_24)
 }
 
+
 val bottomBarDestinations = listOf(FlashQuizzerDestinations.Home, FlashQuizzerDestinations.UploadDoc, FlashQuizzerDestinations.Profile)
 

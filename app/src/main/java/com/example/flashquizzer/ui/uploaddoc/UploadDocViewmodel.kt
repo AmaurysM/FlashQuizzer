@@ -26,22 +26,22 @@ import java.io.InputStream
 
 class UploadDocViewModel : ViewModel() {
 
-    private val _folders = MutableStateFlow<List<FolderDC>>(emptyList())
-    val folders: StateFlow<List<FolderDC>> = _folders.asStateFlow()
+    private val _folders = MutableStateFlow<List<FolderDC>>(emptyList()) //
+    val folders: StateFlow<List<FolderDC>> = _folders.asStateFlow() //  Expose the folders as a StateFlow
 
-    private val _unreviewedFlashcards = MutableStateFlow<MutableList<String>>(mutableListOf())
+    private val _unreviewedFlashcards = MutableStateFlow<MutableList<String>>(mutableListOf()) // MutableStateFlow to hold the unreviewed flashcards
     val unreviewedFlashcards: StateFlow<List<String>> = _unreviewedFlashcards.asStateFlow()
 
-    private val _selectedFlashcards = MutableStateFlow<MutableList<String>>(mutableListOf())
+    private val _selectedFlashcards = MutableStateFlow<MutableList<String>>(mutableListOf()) // MutableStateFlow to hold the selected flashcards
     val selectedFlashcards: StateFlow<List<String>> = _selectedFlashcards.asStateFlow()
 
-    private val _isLoading = MutableStateFlow(false)
+    private val _isLoading = MutableStateFlow(false) // MutableStateFlow to hold the loading state
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
-    private val _error = MutableStateFlow<String?>(null)
+    private val _error = MutableStateFlow<String?>(null) // MutableStateFlow to hold the error message
     val error: StateFlow<String?> = _error.asStateFlow()
 
-    var selectedFolderId: String? = null
+    var selectedFolderId: String? = null // Variable to store the selected folder ID
 
     private val firebaseFirestore = FirebaseFirestore.getInstance()
 
@@ -50,13 +50,13 @@ class UploadDocViewModel : ViewModel() {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
-    private val service = retrofit.create(OpenAIService::class.java)
+    private val service = retrofit.create(OpenAIService::class.java) // Create an instance of the OpenAIService interface
 
     init {
         fetchFoldersFromFirebase()
     }
 
-    private fun fetchFoldersFromFirebase() {
+    private fun fetchFoldersFromFirebase() { // Function to fetch folders from Firebase
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
         viewModelScope.launch {
             try {
@@ -77,7 +77,7 @@ class UploadDocViewModel : ViewModel() {
         }
     }
 
-    fun extractTextFromFile(context: Context, uri: Uri) {
+    fun extractTextFromFile(context: Context, uri: Uri) { // Function to extract text from a file
         viewModelScope.launch {
             _isLoading.value = true
             try {
@@ -96,7 +96,7 @@ class UploadDocViewModel : ViewModel() {
                     else -> "Unsupported file type."
                 }
 
-                generateFlashcards(extractedText)
+                generateFlashcards(extractedText) // Generate flashcards from the extracted text
                 _error.value = null
             } catch (e: Exception) {
                 _error.value = "Error reading document: ${e.message}"
@@ -107,7 +107,7 @@ class UploadDocViewModel : ViewModel() {
         }
     }
 
-    private suspend fun generateFlashcards(content: String) {
+    private suspend fun generateFlashcards(content: String) { // Function to generate flashcards from the provided text
         try {
             val request = OpenAIRequest(
                 model = "gpt-4",
@@ -156,13 +156,13 @@ class UploadDocViewModel : ViewModel() {
         }
     }
 
-    private fun parseFlashcards(responseContent: String): List<String> {
-        val flashcardBlocks = responseContent.split(Regex("FlashCard #\\d+:"))
+    private fun parseFlashcards(responseContent: String): List<String> { // Function to parse flashcards from the response content
+        val flashcardBlocks = responseContent.split(Regex("FlashCard #\\d+:")) // Split the response content into flashcard blocks
             .mapNotNull { it.trim().takeIf { it.isNotEmpty() } }
 
         val flashcards = mutableListOf<String>()
 
-        for (block in flashcardBlocks) {
+        for (block in flashcardBlocks) { // Iterate over the flashcard blocks
             val questionMatch = Regex("Question: (.+)").find(block)
             val answerMatch = Regex("Answer: (.+)").find(block)
             if (questionMatch != null && answerMatch != null) {
@@ -202,30 +202,30 @@ class UploadDocViewModel : ViewModel() {
         }
     }
 
-    fun addCustomFlashcard(flashcard: String) {
+    fun addCustomFlashcard(flashcard: String) { // Function to add a custom flashcard
         _unreviewedFlashcards.value.add(flashcard)
     }
 
-    fun confirmFlashcard(flashcard: String) {
+    fun confirmFlashcard(flashcard: String) { // Function to confirm a flashcard
         val selectedList = _selectedFlashcards.value.toMutableList()
         val unreviewedList = _unreviewedFlashcards.value.toMutableList()
 
         if (!selectedList.contains(flashcard)) {
             selectedList.add(flashcard)
         }
-        unreviewedList.remove(flashcard)
+        unreviewedList.remove(flashcard) // Remove the flashcard from the unreviewed list
 
-        _selectedFlashcards.value = selectedList
-        _unreviewedFlashcards.value = unreviewedList
+        _selectedFlashcards.value = selectedList // Update the selected flashcards
+        _unreviewedFlashcards.value = unreviewedList // Update the unreviewed flashcards
     }
 
-    fun rejectFlashcard(flashcard: String) {
+    fun rejectFlashcard(flashcard: String) { // Function to reject a flashcard
         val unreviewedList = _unreviewedFlashcards.value.toMutableList()
         unreviewedList.remove(flashcard)
         _unreviewedFlashcards.value = unreviewedList
     }
 
-    suspend fun saveFlashcardsToFirebase() {
+    suspend fun saveFlashcardsToFirebase() { // Function to save flashcards to Firebase
         _isLoading.value = true
         try {
             val flashcardsToSave = _selectedFlashcards.value
@@ -237,7 +237,7 @@ class UploadDocViewModel : ViewModel() {
                 return
             }
             if (folderId != null) {
-                val folderRef = firebaseFirestore.collection("users").document(userId)
+                val folderRef = firebaseFirestore.collection("users").document(userId) // Get a reference to the user's folder
                     .collection("folders").document(folderId)
                 val flashcardsData = flashcardsToSave.mapNotNull { flashcardString ->
                     val flashcard = parseFlashcardString(flashcardString)
@@ -266,7 +266,7 @@ class UploadDocViewModel : ViewModel() {
         }
     }
 
-    private fun parseFlashcardString(flashcardString: String): Flashcard? {
+    private fun parseFlashcardString(flashcardString: String): Flashcard? { // Function to parse a flashcard string
         val questionMatch = Regex("Question: (.+)").find(flashcardString)
         val answerMatch = Regex("Answer: (.+)").find(flashcardString)
         return if (questionMatch != null && answerMatch != null) {

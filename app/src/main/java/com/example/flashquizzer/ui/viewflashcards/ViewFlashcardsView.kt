@@ -30,8 +30,8 @@ fun ViewFlashcardsView(
             .background(MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        flashcards.forEach { flashcard ->
-            var isFrontSide by remember { mutableStateOf(true) }
+        flashcards.forEach { flashcard -> // Iterate over the list of flashcards
+            var isFrontSide by remember { mutableStateOf(true) } // State variable to track the side of the flashcard
 
             Card(
                 modifier = Modifier
@@ -51,7 +51,7 @@ fun ViewFlashcardsView(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = if (isFrontSide) flashcard.question else flashcard.answer,
+                        text = if (isFrontSide) flashcard.question else flashcard.answer, // Display the question or answer based on the side of the flashcard
                         fontWeight = FontWeight.Bold,
                         color = Color.Black,
                         style = MaterialTheme.typography.bodyLarge

@@ -19,14 +19,14 @@ import com.example.flashquizzer.navigation.FlashQuizzerDestinations
 import com.example.flashquizzer.viewmodel.UploadDocViewModel
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class) // Required for the DropdownMenu API
 @Composable
 fun SelectFlashcardsView(
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
-    val activity = LocalContext.current as ComponentActivity
-    val viewModel: UploadDocViewModel = viewModel(activity)
+    val activity = LocalContext.current as ComponentActivity // Get the current activity
+    val viewModel: UploadDocViewModel = viewModel(activity) // Create an instance of the view model
     val unreviewedFlashcards by viewModel.unreviewedFlashcards.collectAsState()
     val selectedFlashcards by viewModel.selectedFlashcards.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
