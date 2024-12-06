@@ -32,7 +32,7 @@ fun FlashQuizzerNavigation(
     barIsVisible: (Boolean) -> Unit = { input -> input }
 
 ) {
-    NavHost(
+    NavHost( // Create a NavHost
         navController = navController,
         startDestination =FlashQuizzerDestinations.Splash.route,
         modifier = modifier
@@ -49,7 +49,9 @@ fun FlashQuizzerNavigation(
 
         composable(FlashQuizzerDestinations.ViewFlashcards.route) {
             barIsVisible(true)
+
             ViewFlashcardsView(navController)
+
         }
         composable(FlashQuizzerDestinations.TakeQuiz.route) {
             barIsVisible(true)
@@ -72,7 +74,7 @@ fun FlashQuizzerNavigation(
             barIsVisible(false)
             SplashView(navController)
         }
-        composable(FlashQuizzerDestinations.SelectFlashcards.route) {
+ composable(FlashQuizzerDestinations.SelectFlashcards.route) {
             barIsVisible(true)
             SelectFlashcardsView(navController = navController)
         }
@@ -82,7 +84,6 @@ fun FlashQuizzerNavigation(
             FolderContentView(navController = navController, folderId = folderId)
         }
     }
-}
 
 // Extension function for easier navigation
 fun NavHostController.navigateToDestination(destination: FlashQuizzerDestinations) {
