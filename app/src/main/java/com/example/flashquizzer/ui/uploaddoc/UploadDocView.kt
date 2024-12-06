@@ -39,7 +39,7 @@ fun UploadDocView(
         }
     }
 
-    // Flag to prevent multiple navigations
+    // Flag to prevent multiple navigations.
     var hasNavigated by remember { mutableStateOf(false) }
 
     // Use LaunchedEffect to navigate when flashcards are generated

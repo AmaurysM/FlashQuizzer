@@ -40,7 +40,7 @@ fun FolderContentView( // This is the composable function
         )
 
         if (isLoading) {
-            // Show a loading indicator while flashcards are being loaded
+            // Show a loading indicator while flashcards are being loaded.
             CircularProgressIndicator()
         } else if (flashcards.isEmpty()) {
             Text("No flashcards available in this folder.")

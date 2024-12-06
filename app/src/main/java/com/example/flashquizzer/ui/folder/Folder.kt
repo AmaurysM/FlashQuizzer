@@ -15,14 +15,14 @@ import androidx.navigation.NavHostController
 import com.example.flashquizzer.model.FolderDC
 
 @Composable
-fun Folder(folder: FolderDC, navController: NavHostController) { // This is the composable function
+fun Folder(folder: FolderDC, navController: NavHostController) { // Composable function to display a folder
     Column(
         modifier = Modifier
             .clip(shape = RoundedCornerShape(8.dp))
             .fillMaxWidth()
             .padding(horizontal = 10.dp, vertical = 5.dp)
             .clickable {
-                // Navigate to the folder's content view
+                // Navigate to the folder's content view.
                 navController.navigate("folder/${folder.id}")
             }
     ) {

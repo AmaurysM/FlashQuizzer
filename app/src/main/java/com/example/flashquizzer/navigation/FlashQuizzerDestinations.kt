@@ -2,7 +2,7 @@ package com.example.flashquizzer.navigation
 
 import com.example.flashquizzer.R
 
-// Sealed class to represent the destinations in the app
+//
 sealed class FlashQuizzerDestinations(val route: String, val title: String = "", val icon: Int = 0) {
     data object Splash : FlashQuizzerDestinations("splash")
     data object ViewFlashcards : FlashQuizzerDestinations("view_flashcards")
@@ -16,6 +16,6 @@ sealed class FlashQuizzerDestinations(val route: String, val title: String = "",
     data object Profile : FlashQuizzerDestinations("profile", "Profile", R.drawable.baseline_account_circle_24)
 }
 
-
+// Bottom bar destinations
 val bottomBarDestinations = listOf(FlashQuizzerDestinations.Home, FlashQuizzerDestinations.UploadDoc, FlashQuizzerDestinations.Profile)
 

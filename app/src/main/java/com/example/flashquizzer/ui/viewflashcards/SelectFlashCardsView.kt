@@ -34,7 +34,7 @@ fun SelectFlashcardsView(
     val folders by viewModel.folders.collectAsState()
     val scope = rememberCoroutineScope()
 
-    // State variables for manual flashcard creation
+    // State variables for manual flashcard creation.
     var newQuestion by remember { mutableStateOf("") }
     var newAnswer by remember { mutableStateOf("") }
 

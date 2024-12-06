@@ -85,7 +85,7 @@ fun FlashQuizzerNavigation(
         }
     }
 
-// Extension function for easier navigation
+// Extension function for NavHostController to navigate to a destination.
 fun NavHostController.navigateToDestination(destination: FlashQuizzerDestinations) {
     this.navigate(destination.route) {
         launchSingleTop = true
